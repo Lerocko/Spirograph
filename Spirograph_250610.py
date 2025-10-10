@@ -2,6 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
+def draw_spirograph(xs, ys):
+    plt.ion()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.set_aspect('equal')
+    ax.set_xlim(min(xs)-10, max(xs)+10)
+    ax.set_ylim(min(ys)-10, max(ys)+10)
+    ax.set_title('Hypotrochoid')
+    line, = ax.plot([], [], color='blue')
+            
+    for i in range(len(xs)):
+        line.set_data(xs[:i], ys[:i])
+        plt.pause(0.001)
+    plt.ioff()
+    plt.show()
+    plt.close(fig)
+
 def get_user_input():
     while True:
         try:
@@ -15,7 +31,7 @@ def get_user_input():
         except ValueError:
             print("Invalid input. Please enter numeric values.")
 
-def generate_points(R = 70, r = 79, d = 75):
+def generate_points(R = 220, r = 65, d = 110):
     k = r / R
     l = d / r
     numerator = round(R - r) # rounding numerator to avoid floating point issues
@@ -33,22 +49,19 @@ def generate_points(R = 70, r = 79, d = 75):
     return xs, ys
 
 def main():
-    R, r, d = get_user_input()
-    xs, ys = generate_points(R, r, d)
-    plt.ion()
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.set_aspect('equal')
-    ax.set_xlim(min(xs)-10, max(xs)+10)
-    ax.set_ylim(min(ys)-10, max(ys)+10)
-    ax.set_title('Hypotrochoid')
-    line, = ax.plot([], [], color='blue')
-    
-    for i in range(len(xs)):
-        line.set_data(xs[:i], ys[:i])
-        plt.pause(0.001)
-    plt.ioff()
-    plt.show()
-        
+    xs, ys = generate_points()
+    draw_spirograph(xs, ys)
+    while True:
+        R, r, d = get_user_input()
+        xs, ys = generate_points(R, r, d)
+        draw_spirograph(xs, ys)
+        try:
+            cont = input("Do you want to draw another spirograph? (y/n): ").strip().lower()
+            if cont != 'y':
+                break
+        except EOFError:
+            break
+                
         
 if __name__ == "__main__":
     main()
