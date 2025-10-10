@@ -32,6 +32,12 @@ def get_user_input():
             return R, r, d
         except ValueError:
             print("Invalid input. Please enter numeric values.")
+        except KeyboardInterrupt:
+            if answer_yes_no("Are you sure you want to exit? (y/n): ") == True:
+                print("Exiting program. Goodbye!")
+                break
+            else:
+                continue
 
 def generate_points(R = 220, r = 65, d = 110, scale_factor = 1):
     if R < 1 or r < 1 or d < 1:
@@ -88,6 +94,14 @@ def save_spirofig(fig):
             break
         except Exception as e:
             print(f"Error saving file: {e}. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter numeric values.")
+        except KeyboardInterrupt:
+            if answer_yes_no("Are you sure you want to exit? (y/n): ") == True:
+                print("Exiting program. Goodbye!")
+                break
+            else:
+                continue
 
 def answer_yes_no(prompt):
     while True:
