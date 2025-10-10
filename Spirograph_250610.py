@@ -2,13 +2,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-def generate_points(R = 20, r = 19, d = 5):
+def get_user_input():
+    while True:
+        try:
+            R = float(input("Enter the radius of the fixed circle (R): "))
+            r = float(input("Enter the radius of the rolling circle (r): "))
+            d = float(input("Enter the distance from the center of the rolling circle to the drawing point (d): "))
+            if R <= 0 or r <= 0 or d < 0:
+                print("Please enter positive values for R and r, and non-negative value for d.")
+                continue
+            return R, r, d
+        except ValueError:
+            print("Invalid input. Please enter numeric values.")
+
+def generate_points(R = 70, r = 79, d = 75):
     k = r / R
     l = d / r
     numerator = round(R - r) # rounding numerator to avoid floating point issues
     denominator = round(r) # rounding denominator to avoid floating point issues
     g = math.gcd(numerator, denominator) # greatest common divisor
     q = (denominator // g) # number of rotations
+    q = min(q, 50) # limit to 50 rotations for practicality
     xs, ys = [], []
     for theta in range(0, 360 * q, 5):
         theta_rad = np.radians(theta)
@@ -19,7 +33,8 @@ def generate_points(R = 20, r = 19, d = 5):
     return xs, ys
 
 def main():
-    xs, ys = generate_points()
+    R, r, d = get_user_input()
+    xs, ys = generate_points(R, r, d)
     plt.ion()
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_aspect('equal')
