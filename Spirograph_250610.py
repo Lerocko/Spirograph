@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import math
 import os
 
-def draw_spirograph(xs, ys):
+def draw_spirograph(xs, ys, scale_factor=1):
     plt.ion()
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_aspect('equal')
-    ax.set_xlim(min(xs)-10, max(xs)+10)
-    ax.set_ylim(min(ys)-10, max(ys)+10)
+    ax.set_xlim(min(xs/scale_factor)-10, max(xs/scale_factor)+10)
+    ax.set_ylim(min(ys/scale_factor)-10, max(ys/scale_factor)+10)
     ax.set_title('Hypotrochoid')
     line, = ax.plot([], [], color='blue')
             
@@ -50,7 +50,7 @@ def generate_points(R = 220, r = 65, d = 110, scale_factor = 1):
         y = R*((1-k)*np.sin(theta_rad) - l*k*np.sin(((1-k)/k)*theta_rad))
         xs.append(x/scale_factor)
         ys.append(y/scale_factor)
-    return xs, ys
+    return xs, ys, scale_factor
 
 def check_and_scale_parameters(R, r, d):
     """ Scale parameters if one or more are too small to avoid floating point precision issues. """
@@ -109,8 +109,8 @@ def main():
     
     if answer_yes_no("\nWould you like to see an example spirograph first? (y/n): ") == True:
         print("\nLet's see an example spirograph first.")
-        xs, ys = generate_points()
-        fig = draw_spirograph(xs, ys)
+        xs, ys, scale_factor = generate_points()
+        fig = draw_spirograph(xs, ys, scale_factor)
     
     while True:
         R, r, d = get_user_input()
@@ -121,9 +121,7 @@ def main():
         if not answer_yes_no("Do you want to draw another spirograph? (y/n): "):
             print("Thank you for using the Spirograph Generator. Goodbye!")
             break
-               
-            
-      
+                    
 if __name__ == "__main__":
     while True:
         try:
