@@ -7,8 +7,8 @@ def draw_spirograph(xs, ys, scale_factor=1):
     plt.ion()
     fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_aspect('equal')
-    ax.set_xlim(min(xs/scale_factor)-10, max(xs/scale_factor)+10)
-    ax.set_ylim(min(ys/scale_factor)-10, max(ys/scale_factor)+10)
+    ax.set_xlim(min(xs)-(10/scale_factor), max(xs)+(10/scale_factor))
+    ax.set_ylim(min(ys)-(10/scale_factor), max(ys)+(10/scale_factor))
     ax.set_title('Hypotrochoid')
     line, = ax.plot([], [], color='blue')
             
@@ -32,6 +32,9 @@ def get_user_input():
             return R, r, d
         except ValueError:
             print("Invalid input. Please enter numeric values.")
+        except KeyboardInterrupt:
+            handle_interrupt()
+            continue
         
 def generate_points(R = 220, r = 65, d = 110, scale_factor = 1):
     if R < 1 or r < 1 or d < 1:
@@ -88,14 +91,17 @@ def save_spirofig(fig):
             break
         except Exception as e:
             print(f"Error saving file: {e}. Please try again.")
+        except KeyboardInterrupt:
+            handle_interrupt()
+            continue
      
 def answer_yes_no(prompt):
     while True:
         try:
             answer = input(prompt).strip().lower()
         except KeyboardInterrupt:
-            print("\nExiting program. Goodbye!")
-            return False
+            handle_interrupt()
+            continue
         if answer in ['y', 'yes']:
             return True
         elif answer in ['n', 'no']:
@@ -114,24 +120,31 @@ def main():
     
     while True:
         R, r, d = get_user_input()
-        xs, ys = generate_points(R, r, d)
-        fig = draw_spirograph(xs, ys)
+        xs, ys, scale_factor = generate_points(R, r, d)
+        fig = draw_spirograph(xs, ys, scale_factor)
         save_spirofig(fig)
         
         if not answer_yes_no("Do you want to draw another spirograph? (y/n): "):
             print("Thank you for using the Spirograph Generator. Goodbye!")
             break
+
+def handle_interrupt():
+    print()  # salto de línea limpio
+    try:
+        while True:
+            choice = input("Are you sure you want to exit? (y/n): ").strip().lower()
+            if choice in ["y", "yes"]:
+                print("Exiting program. Goodbye!")
+                exit()
+            elif choice in ["n", "no"]:
+                print("Resuming program...\n")
+                return
+            else:
+                print("Please answer with 'y' or 'n'.")
+    except KeyboardInterrupt:
+        print("\nExiting program. Goodbye!")
+        exit()
+    
                     
 if __name__ == "__main__":
-    while True:
-        try:
-            main()
-            break
-        except KeyboardInterrupt:
-            print()  # salto de línea limpio
-            if answer_yes_no("Are you sure you want to exit? (y/n): "):
-                print("Exiting program. Goodbye!")
-                break
-            else:
-                print("Resuming program...\n")
-                continue
+    main()
