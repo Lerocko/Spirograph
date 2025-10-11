@@ -1,0 +1,31 @@
+# Ignore virtual environments
+venv/
+.env/
+env/
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore system or editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Ignore Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Ignore test cache and reports
+.pytest_cache/
+coverage/
+*.log
+
+# Ignore images or generated output (optional)
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.csv
+*.xlsx
