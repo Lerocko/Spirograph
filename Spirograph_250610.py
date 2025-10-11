@@ -32,13 +32,7 @@ def get_user_input():
             return R, r, d
         except ValueError:
             print("Invalid input. Please enter numeric values.")
-        except KeyboardInterrupt:
-            if answer_yes_no("Are you sure you want to exit? (y/n): ") == True:
-                print("Exiting program. Goodbye!")
-                break
-            else:
-                continue
-
+        
 def generate_points(R = 220, r = 65, d = 110, scale_factor = 1):
     if R < 1 or r < 1 or d < 1:
         R, r, d, scale_factor = check_and_scale_parameters(R, r, d)
@@ -94,22 +88,14 @@ def save_spirofig(fig):
             break
         except Exception as e:
             print(f"Error saving file: {e}. Please try again.")
-        except ValueError:
-            print("Invalid input. Please enter numeric values.")
-        except KeyboardInterrupt:
-            if answer_yes_no("Are you sure you want to exit? (y/n): ") == True:
-                print("Exiting program. Goodbye!")
-                break
-            else:
-                continue
-
+     
 def answer_yes_no(prompt):
     while True:
         try:
             answer = input(prompt).strip().lower()
         except KeyboardInterrupt:
             print("\nExiting program. Goodbye!")
-            exit()
+            return False
         if answer in ['y', 'yes']:
             return True
         elif answer in ['n', 'no']:
@@ -131,18 +117,23 @@ def main():
         xs, ys = generate_points(R, r, d)
         fig = draw_spirograph(xs, ys)
         save_spirofig(fig)
+        
+        if not answer_yes_no("Do you want to draw another spirograph? (y/n): "):
+            print("Thank you for using the Spirograph Generator. Goodbye!")
+            break
+               
+            
+      
+if __name__ == "__main__":
+    while True:
         try:
-            if answer_yes_no("Do you want to draw another spirograph? (y/n): ") == False:
-                print("Thank you for using the Spirograph Generator. Goodbye!")
-                break
+            main()
+            break
         except KeyboardInterrupt:
-            if answer_yes_no("Are you sure you want to exit? (y/n): ") == True:
+            print()  # salto de línea limpio
+            if answer_yes_no("Are you sure you want to exit? (y/n): "):
                 print("Exiting program. Goodbye!")
                 break
             else:
+                print("Resuming program...\n")
                 continue
-                
-                
-        
-if __name__ == "__main__":
-    main()
